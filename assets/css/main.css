@@ -1,0 +1,92 @@
+* {
+  box-sizing: border-box; }
+
+a {
+  color: inherit;
+  text-decoration: none; }
+
+html {
+  margin: 0;
+  padding: 0;
+  text-align: center; }
+
+body {
+  margin: 2rem auto 1rem;
+  padding: 0;
+  width: 80%;
+  max-width: 900px;
+  text-align: left;
+  font-size: 100%;
+  font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;
+  color: #333; }
+
+.box {
+  background: rgba(0, 119, 188, 0.2);
+  padding: 1rem; }
+  .box.result {
+    background: #DEEED2; }
+  .box p {
+    margin: 0;
+    padding: 0; }
+  .box h2 {
+    margin: 1rem 0;
+    padding: 0; }
+  .box a {
+    font-size: .9em;
+    color: #0077bc; }
+    .box a:hover {
+      color: #0067a3; }
+
+#tree {
+  display: block;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  width: 100%; }
+  #tree ul {
+    list-style: none;
+    margin: 0;
+    padding: 0; }
+  #tree .collapse + ul {
+    display: none; }
+  #tree li {
+    position: relative;
+    margin: .2rem 0;
+    padding: .5rem 1rem .6rem;
+    background: #0077bc;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    clear: both; }
+    #tree li .toggle {
+      display: inline-block;
+      width: 1rem;
+      margin-right: .4rem; }
+    #tree li .action {
+      display: inline-block;
+      border: none;
+      outline: none;
+      color: white;
+      margin: -.1rem -.5rem 0 0;
+      float: right;
+      font-size: .7em;
+      font-weight: normal;
+      text-transform: uppercase;
+      padding: .3rem .5rem;
+      background: rgba(255, 255, 255, 0.2);
+      cursor: pointer; }
+      #tree li .action:hover {
+        background: rgba(0, 0, 0, 0.3); }
+    #tree li:hover {
+      background: rgba(0, 119, 188, 0.9); }
+    #tree li ul li {
+      font-weight: normal;
+      background: rgba(0, 0, 0, 0.1); }
+      #tree li ul li:hover {
+        background: rgba(0, 0, 0, 0.2); }
+      #tree li ul li ul li {
+        background: rgba(255, 255, 255, 0.1); }
+        #tree li ul li ul li .action {
+          background: rgba(0, 0, 0, 0.2); }
+        #tree li ul li ul li:hover {
+          background: rgba(255, 255, 255, 0.2); }
