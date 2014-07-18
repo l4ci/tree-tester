@@ -164,5 +164,9 @@ if (get('action',false) != false){
 
 <?php endif; ?>
 
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/main.js"></script>
+  </body>
+</html>
 <?php
 ob_end_flush();
