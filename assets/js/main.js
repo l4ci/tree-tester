@@ -1,7 +1,6 @@
 $("span.collapse").before('<span class="toggle">+</span>');
 
 $("li a").each(function() {
-  $( this ).attr('href','javscript:;');
   $( this ).after('<button type="submit" name="result" value="'+$(this).closest('li').find('a').text()+'" class="action">Found here</button>');
 });
 
