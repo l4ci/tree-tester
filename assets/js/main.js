@@ -1,7 +1,8 @@
 $("span.collapse").before('<span class="toggle">+</span>');
 
 $("li a").each(function() {
-  $( this ).after('<button type="submit" name="result" value="'+$(this).closest('li').find('a').text()+'" class="action">Select</button>');
+  $( this ).attr('href','javscript:;');
+  $( this ).after('<button type="submit" name="result" value="'+$(this).closest('li').find('a').text()+'" class="action">Found here</button>');
 });
 
 $("span.collapse").click(function() {
@@ -25,7 +26,7 @@ $('span.toggle').click(function(){
   $(this).closest('li').find('.collapse').first().trigger('click');
 });
 
-$("li a").click(function() {
-  var text = $(this).text();
-  $('#way').val($('#way').val() + text + ' ');
-});
+// $("li a").click(function() {
+//   var text = $(this).text();
+//   $('#way').val($('#way').val() + text + ' ');
+// });

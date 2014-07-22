@@ -71,6 +71,17 @@ if (get('action',false) != false){
       resetQ();
       go(HOME);
     break;
+
+    case 'submit':
+      s::set('pleaseSave',true);
+      s::set('comment',get('comment',false));
+      go(HOME);
+    break;
+
+    case 'okay':
+      s::set('nextVersionScreen',false);
+      go(HOME);
+    break;
   }
 }
 
@@ -91,6 +102,20 @@ if (get('action',false) != false){
 
 <h1>Tree Testing</h1>
 
+<?php if (s::get('nextVersionScreen',false)): ?>
+  <div class="box screen">
+    <h2>Version: <?=version(s::get('version'))?></h2>
+    <p>You will get asked <?=count($questions)?> questions for Version <?=version(s::get('version'))?>.</p>
+    <p><br></p>
+    <p>Try to find the solution/information for the question in the navigation tree
+      <br>and select "Found here".
+      <br>
+      <br>If you can't solve the question, simple click "Skip question".</p>
+    <a href="?action=okay" class="btn">Let's start</a>
+  </div>
+  <?php exit(); ?>
+<?php endif; ?>
+
 <?php if (s::get('question',0) < $questionCount ): ?>
 
   <form action="?action=next" method="POST">
@@ -99,6 +124,7 @@ if (get('action',false) != false){
     <div class="box">
       <p>Question: <?=s::get('question',0)+1?> / <?=$questionCount?></p>
       <h2><?=$allQuestion[s::get('version',0)][s::get('realQuestion',0)]?></h2>
+      <p><small>Version: <?=version(s::get('version'))?></small></p>
       <button type="submit" name="action" value="skip">Skip this Question</button>
     </div>
 
@@ -116,53 +142,69 @@ if (get('action',false) != false){
 
 <?php else: ?>
 
-  <?php 
-    // Saved already?
-    if (s::get('didsave',false) === false){
+  <?php if (!s::get('pleaseSave',false)): ?>
 
-      $save = array(
-        'id'       => s::get('id'),
-        'started'  => date('Y-m-d H:i',s::get('id')),
-        'finished' => date('Y-m-d H:i'),
-        'data'     => s::get('saved')
-      );
-      $path = DATA . DS . s::get('id'). '_'.mt_rand().'.json';
-      
-      // Save to file
-      if (is_writable($path) && c::get('deliver.method') === "file"){
+    <div class="box result">
+      <h2>Last Step</h2>
+      <p>Which version did you enjoy more?<br>
+      Any other comments?</p>
+      <form action="?action=submit" method="POST" accept-charset="UTF-8">
+        <textarea name="comment" id="" cols="30" rows="10" placeholder="I liked version X, because..."></textarea>
+        <button type="submit" name="submit" value="submit">Save &amp; Submit Result</button>
+      </form>
+    </div>
+
+  <?php else: ?>
+
+    <?php 
+      // Saved already?
+      if (s::get('didsave',false) === false){
+
+        $save = array(
+          'id'       => s::get('id'),
+          'started'  => date('Y-m-d H:i',s::get('id')),
+          'finished' => date('Y-m-d H:i'),
+          'data'     => s::get('saved'),
+          'comment'  => s::get('comment',false)
+        );
+        $path = DATA . DS . s::get('id'). '_'.mt_rand().'.json';
         
-        $write = f::write($path, $save);
-        s::set('didsave',true);
-
-      // Send by mail
-      }else if (c::get('deliver.method') === "mail"){
-
-        $header     = 'From: ' .c::get('deliver.email.to'). "\r\n" .
-                      'Reply-To: ' .c::get('deliver.email.to'). "\r\n" .
-                      'X-Mailer: PHP/' . phpversion();
-
-        $mail = mail(c::get('deliver.email.to'), "Tree Testing - ".s::get('id'), a::json($save), $header);
-
-        if (!$mail){
-          echo "Something went wrong - could not save the file and could not email it :(";
-        }else{
+        // Save to file
+        if (is_writable($path) && c::get('deliver.method') === "file"){
+          
+          $write = f::write($path, $save);
           s::set('didsave',true);
+
+        // Send by mail
+        }else if (c::get('deliver.method') === "mail"){
+
+          $header     = 'From: ' .c::get('deliver.email.to'). "\r\n" .
+                        'Reply-To: ' .c::get('deliver.email.to'). "\r\n" .
+                        'X-Mailer: PHP/' . phpversion();
+
+          $mail = mail(c::get('deliver.email.to'), "Tree Testing - ".s::get('id'), a::json($save), $header);
+
+          if (!$mail){
+            echo "Something went wrong - could not save the file and could not email it :(";
+          }else{
+            s::set('didsave',true);
+          }
+
+        // Echo Output
+        }else{
+          a::show($save);
         }
 
-      // Echo Output
-      }else{
-        a::show($save);
       }
+     ?>
 
-    }
-   ?>
+    <div class="box result">
+      <h2>Thank you for your time!</h2>
+      <a href="?action=reset">Start again?</a>
+    </div>
+  <?php endif; // pleaseSave?>
 
-  <div class="box result">
-    <h2>Thank you for your time!</h2>
-    <a href="?action=reset">Start again?</a>
-  </div>
-
-<?php endif; ?>
+<?php endif; // questionCount?>
 
   <script src="assets/js/jquery.min.js"></script>
   <script src="assets/js/main.js"></script>

@@ -4,15 +4,20 @@
  * Set the next question on the right version
  */
 function nextQ(){
-  global $versions;
-  if (s::get('version',0) < $versions-1){
-    // set next version on same question
+  global $versions,
+         $questionCount;
+  
+  if ( ($questionCount / $versions) == s::get('realQuestion')+1){
+    // Next Version, Question 1
     s::set('version',s::get('version')+1);
     s::set('question',s::get('question')+1);
-    s::set('realQuestion',s::get('realQuestion'));
+    s::set('realQuestion',0);
+    
+    if (s::get('version')+1 <= $versions){
+      s::set('nextVersionScreen',true);  
+    }
   }else{
-    // set first version on next question
-    s::set('version',0);
+    // Same Version, Next Question
     s::set('question',s::get('question')+1);
     s::set('realQuestion',s::get('realQuestion')+1);
   }
@@ -37,4 +42,11 @@ function resetQ(){
   s::set('question',0);
   s::set('realQuestion',0);
   s::set('saved',array());
+  s::set('pleaseSave',false);
+  s::set('nextVersionScreen',true);
+}
+
+function version($number){
+  $alphas = range('A', 'Z');
+  return $alphas[$number];
 }
